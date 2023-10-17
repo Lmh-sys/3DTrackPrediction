@@ -31,6 +31,7 @@ Zekfpre = [dd,alpha,beta]';
  % 求Jacobian矩阵H，H为3行9列的矩阵
 D = Dist(Xpre,Station);
 DD = Dist3(Xpre,Station);
+% 参考：老王的例子扩展卡尔曼滤波矩阵求导
 Jy = [(Xpre(1,1)-Station(1,1))/DD,(Xpre(2,1)-Station(2,1))/DD,(Xpre(3,1)-Station(3,1))/DD,0,0,0,0,0,0;
       -(Xpre(2,1)-Station(2,1))/D^2,(Xpre(1,1)-Station(1,1))/D^2,0,0,0,0,0,0,0;
       (1/(1+((Xpre(3,1)-Station(3,1))/D)^2)).*(-2*(Xpre(1,1)-Station(1,1))/D^4),(1/(1+((Xpre(3,1)-Station(3,1))/D)^2)).*(-2*(Xpre(2,1)-Station(2,1))/D^4),(1/D)/(1/(1+((Xpre(3,1)-Station(3,1))/D)^2)),0,0,0,0,0,0];

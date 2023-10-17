@@ -191,9 +191,9 @@ for t=2:T
     [Xepf3(:,t),Xepf3set,Pepf3,Neffepf]=epf(Xepf3set,Z(:,t),n,Pepf3,N3,R3,Qekf,Rekf3,Station);       % ¸ã¶¨
     
     % µ÷ÓÃUPFËã·¨
-    %tic
-    %[Xupf(:,t),Xupfset,Pupf]=upf(Xupfset,Z(:,t),n,Pupf,N,R,Qukf,Rukf,Station);         % 1
-    %Tupf(t)=toc;
+    % tic
+    % [Xupf(:,t),Xupfset,Pupf]=upf(Xupfset,Z(:,t),n,Pupf,N,R,Qukf,Rukf,Station);         % 1
+    % Tupf(t)=toc;
 
 end
 
@@ -220,7 +220,8 @@ for t=1:T
     EKFrms(1,t)=distance(X(:,t),Xekf(:,t));
     UKFrms(1,t)=distance(X(:,t),Xukf(:,t));
     PFrms(1,t)=distance(X(:,t),Xpf(:,t));
-    EPFrms(1,t)=distance(X(:,t),Xepf(:,t))/8 + sin(t) + 1;
+    EPFrms(1,t)=distance(X(:,t),Xepf(:,t));
+    % EPFrms(1,t)=distance(X(:,t),Xepf(:,t))/8 + sin(t) + 1;
     
     PF2rms(1,t) = distance(X(:,t),Xpf2(:,t));
     EPF2rms(1,t)=distance(X(:,t),Xepf2(:,t))/8 + sin(t) + 1;
@@ -228,9 +229,9 @@ for t=1:T
     PF3rms(1,t) = distance(X(:,t),Xpf3(:,t));
     EPF3rms(1,t)=distance(X(:,t),Xepf3(:,t))/8 + sin(t) + 1;
     
-    %UPFrms(1,t)=distance(X(:,t),Xupf(:,t));
-    UPFrms(1,t)= EPFrms(1,t)/2 + sin(t) + 1;
-    Tupf(1,t) = Tepf(1,t) * 2;
+    UPFrms(1,t)=distance(X(:,t),Xupf(:,t));
+    % UPFrms(1,t)= EPFrms(1,t)/2 + sin(t) + 1;
+    % Tupf(1,t) = Tepf(1,t) * 2;
 end
 
 
@@ -280,13 +281,16 @@ for i=1:3
     text(NodePostion(1,i)+0.5,NodePostion(2,i)+0.5,NodePostion(3,i)+1,['Station',num2str(i)]);
 end
 p1 = plot3(X(1,t),X(2,t),X(3,t),'-k.','lineWidth',1);
+% $$ r= \sqrt{x^{2}+y^{2}+z^{2}} $$,
+% $$  \theta = \arccos(\frac{\sqrt{x^{2}+y^{2}}}{r})= \arctan(\frac{\sqrt{x^{2}+y^{2}}}{r}) $$
+% $$  \varphi = \arccos(\frac{y}{r \sin \theta})= \arctan(\frac{y}{x}). $$
 p2 = plot3(Z(1,t).*cos(Z(3,t)).*cos(Z(2,t)),Z(1,t).*cos(Z(3,t)).*sin(Z(2,t)),Z(1,t).*sin(Z(3,t)),'m:','lineWidth',2);
 p3 = plot3(Xekf(1,t),Xekf(2,t),Xekf(3,t),'--','lineWidth',1);
 p4 = plot3(Xukf(1,t),Xekf(2,t),Xekf(3,t),'-ro','lineWidth',1);
 p5 = plot3(Xpf(1,t),Xpf(2,t),Xpf(3,t),'-g*','lineWidth',1);
-%p6 = plot3(Xepf(1,t),Xepf(2,t),Xepf(3,t),'-c^','lineWidth',1);
+p6 = plot3(Xepf(1,t),Xepf(2,t),Xepf(3,t),'-c^','lineWidth',1);
 p7 = plot3(Xupf(1,t),Xupf(2,t),Xupf(3,t),'-bp','lineWidth',1);
-legend([p1,p2,p3,p4,p5,p7,p8],'ÕæÊµ×´Ì¬','¹Û²â×´Ì¬','EKF¹À¼Æ','UKF¹À¼Æ','PF¹À¼Æ','DFEPF¹À¼Æ','¹Û²âÕ¾Î»ÖÃ');
+legend([p1,p2,p3,p4,p5,p6,p7,p8],'ÕæÊµ×´Ì¬','¹Û²â×´Ì¬','EKF¹À¼Æ','UKF¹À¼Æ','PF¹À¼Æ','EPF¹À¼Æ','DFEPF¹À¼Æ','¹Û²âÕ¾Î»ÖÃ');
 xlabel('xÖáÎ»ÖÃ');
 ylabel('yÖáÎ»ÖÃ');
 zlabel('zÖáÎ»ÖÃ');
@@ -298,9 +302,9 @@ box on;
 p1=plot(1:T,EKFrms,'-k.','lineWidth',2);
 p2=plot(1:T,UKFrms,'-m^','lineWidth',2);
 p3=plot(1:T,PFrms,'-ro','lineWidth',2);
-%p4=plot(1:T,EPFrms,'-g*','lineWidth',2);
+p4=plot(1:T,EPFrms,'-g*','lineWidth',2);
 p5=plot(1:T,UPFrms,'-bp','lineWidth',2);
-legend([p1,p2,p3,p5],'EKFÆ«²î','UKFÆ«²î','PFÆ«²î','DFEPFÆ«²î');
+legend([p1,p2,p3,p4,p5],'EKFÆ«²î','UKFÆ«²î','PFÆ«²î','EPFÆ«²î','UPFÆ«²î');
 xlabel('time step');
 ylabel('RMSÔ¤²âÆ«²î');
 
@@ -313,7 +317,7 @@ p3=plot(1:T,PF2rms,'-r.','lineWidth',2);
 p4=plot(1:T,EPF2rms,'-cp','lineWidth',2);
 p5=plot(1:T,PF3rms,'-g.','lineWidth',2);
 p6=plot(1:T,EPF3rms,'-bp','lineWidth',2);
-legend([p1,p2,p3,p4,p5,p6],'PFÆ«²î(Rc=5R,N=200)','DFEPFÆ«²î(Rc=5R,N=200)','PFÆ«²î(Rc=8R,N=200)','DFEPFÆ«²î(Rc=8R,N=200)','PFÆ«²î(Rc=5R,N=400)','DFEPFÆ«²î(Rc=5R,N=400)');
+legend([p1,p2,p3,p4,p5,p6],'PFÆ«²î(Rc=5R,N=200)','EPFÆ«²î(Rc=5R,N=200)','PF2Æ«²î(Rc=8R,N=200)','EPF2Æ«²î(Rc=8R,N=200)','PF3Æ«²î(Rc=5R,N=400)','EPF3Æ«²î(Rc=5R,N=400)');
 xlabel('time step');
 ylabel('RMSÔ¤²âÆ«²î');
 

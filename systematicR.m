@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function outIndex = systematicR(inIndex,wn);
+function outIndex = systematicR(inIndex,wn)
  
-  error('下面的参数nargin 请参考书中的值设置，然后删除本行代码')  
-if nargin < 0, error('Not enough input arguments.'); end
+%   error('下面的参数nargin 请参考书中的值设置，然后删除本行代码')  
+% if nargin < 0, error('Not enough input arguments.'); end
 
 wn=wn';
 [arb,N] = size(wn);   
